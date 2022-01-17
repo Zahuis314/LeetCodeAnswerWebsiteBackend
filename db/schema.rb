@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_13_231152) do
+ActiveRecord::Schema.define(version: 2022_01_17_040719) do
 
   create_table "problems", force: :cascade do |t|
     t.string "title"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_231152) do
     t.text "constraints"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["difficulty"], name: "index_problems_on_difficulty"
   end
 
 end
