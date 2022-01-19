@@ -18,9 +18,13 @@ module Scraper
                 }
             }
             QUERY
-            client.execute!({
+            result = client.execute!({
                 query: query
             })
+            return {
+                data: result.data.questionTopicTags.edges.map(&:node),
+                error: result.errors
+            }
         end
     end
 
