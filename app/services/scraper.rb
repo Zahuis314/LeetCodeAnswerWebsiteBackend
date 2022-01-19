@@ -78,12 +78,62 @@ module Scraper
                 error: result.errors
             }
         end
-        def self.get_all_problems_definitions
-            url = URI.parse('https://leetcode.com/api/problems/all/')
-            res = Net::HTTP.start(url.host, url.port,:use_ssl=>true) do |http|
-                http.get(url.path) 
-            end
-            JSON.parse(res.body)["stat_status_pairs"]
+        
+        def self.get_problem_details(slug)
+            client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
+            query = <<-QUERY
+            query questionData($titleSlug: String!) {
+                question(titleSlug: $titleSlug) {
+                    questionId
+                    questionFrontendId
+                    title
+                    titleSlug
+                    content
+                    isPaidOnly
+                    difficulty
+                    likes
+                    dislikes
+                    similarQuestions
+                    categoryTitle
+                    topicTags {
+                        name
+                        slug
+                    }
+                    stats
+                    hints
+                    solution {
+                        id
+                        canSeeDetail
+                        paidOnly
+                        hasVideoSolution
+                        paidOnlyVideo
+                    }
+                    metaData
+                    challengeQuestion {
+                        id
+                        date
+                        incompleteChallengeCount
+                        streakCount
+                        type
+                        __typename
+                    }
+                }
+            }
+            QUERY
+            result = client.execute!({
+                query: query,
+                variables: {
+                    titleSlug: slug
+                },
+                operationName: "questionData"
+            })
+            result.data.question.similarQuestions = JSON.parse(result.data.question.similarQuestions).map{|r| r.except "translatedTitle"}
+            result.data.question.stats = JSON.parse(result.data.question.stats).except "totalAccepted","totalSubmission"
+            result.data.question.metaData = JSON.parse(result.data.question.metaData)#.except "totalAccepted","totalSubmission"
+            return {
+                data: result.data.question,
+                error: result.errors
+            }
         end
     end
 end
