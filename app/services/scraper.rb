@@ -1,7 +1,30 @@
 require 'MyGQLiClient'
-require 'net/http'
+require 'selenium-webdriver'
 module Scraper
-    class Problem
+
+    class Topics
+        def self.get_topics()
+            client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
+            query = <<-QUERY
+            query questionTags {
+                questionTopicTags {
+                    edges {
+                        node {
+                            name
+                            translatedName
+                            slug
+                        }
+                    }
+                }
+            }
+            QUERY
+            client.execute!({
+                query: query
+            })
+        end
+    end
+
+    class Problems
         def self.get_problems(skip=0,limit=50)
             client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
             query = <<-QUERY
