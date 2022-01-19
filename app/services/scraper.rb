@@ -135,5 +135,49 @@ module Scraper
                 error: result.errors
             }
         end
+
+        def self.get_problem_solution(slug)
+            client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
+            query = <<-QUERY
+            query QuestionNote($titleSlug: String!) {
+                question(titleSlug: $titleSlug) {
+                    questionId
+                    article
+                    solution {
+                        id
+                        content
+                        contentTypeId
+                        canSeeDetail
+                        paidOnly
+                        hasVideoSolution
+                        paidOnlyVideo
+                        rating {
+                            id
+                            count
+                            average
+                            userRating {
+                                score
+                                __typename
+                            }
+                            __typename
+                        }
+                        __typename
+                    }
+                    __typename
+                }
+            }              
+            QUERY
+            result = client.execute!({
+                query: query,
+                variables: {
+                    titleSlug: slug
+                },
+                operationName: "QuestionNote"
+            })
+            return {
+                data: result.data.question,
+                error: result.errors
+            }
+        end
     end
 end
