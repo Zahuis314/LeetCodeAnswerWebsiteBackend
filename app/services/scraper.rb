@@ -38,7 +38,7 @@ module Scraper
                     limit: $limit
                     skip: $skip
                     filters: $filters
-                    ) {
+                ) {
                     total: totalNum
                     questions: data {
                         acRate
@@ -54,14 +54,14 @@ module Scraper
                             name
                             id
                             slug
-                            }
+                        }
                         hasSolution
                         hasVideoSolution
                     }
                 }
             }
             QUERY
-            client.execute!({
+            result = client.execute!({
                 query: query,
                 variables: {
                     categorySlug:"",
@@ -70,6 +70,13 @@ module Scraper
                     filters:{}
                 }
             })
+            return {
+                data: {
+                    total: result.data.problemsetQuestionList.total,#["edges"].map(&:node),
+                    questions: result.data.problemsetQuestionList.questions
+                },
+                error: result.errors
+            }
         end
         def self.get_all_problems_definitions
             url = URI.parse('https://leetcode.com/api/problems/all/')
