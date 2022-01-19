@@ -34,7 +34,15 @@ module Scraper
                 }
             }
             QUERY
-            client.execute!(query,{categorySlug:"",skip:skip,limit:limit,filters:{}})
+            client.execute!({
+                query: query,
+                variables: {
+                    categorySlug:"",
+                    skip:skip,
+                    limit:limit,
+                    filters:{}
+                }
+            })
         end
         def self.get_all_problems_definitions
             url = URI.parse('https://leetcode.com/api/problems/all/')
