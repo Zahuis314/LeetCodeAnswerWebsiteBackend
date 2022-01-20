@@ -1,33 +1,4 @@
-require 'MyGQLiClient'
-require 'selenium-webdriver'
 module Scraper
-
-    class Topics
-        def self.get_topics()
-            client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
-            query = <<-QUERY
-            query questionTags {
-                questionTopicTags {
-                    edges {
-                        node {
-                            name
-                            translatedName
-                            slug
-                        }
-                    }
-                }
-            }
-            QUERY
-            result = client.execute!({
-                query: query
-            })
-            return {
-                data: result.data.questionTopicTags.edges.map(&:node),
-                error: result.errors
-            }
-        end
-    end
-
     class Problems
         def self.get_problems(skip=0,limit=50)
             client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
@@ -43,11 +14,8 @@ module Scraper
                     questions: data {
                         acRate
                         difficulty
-                        freqBar
                         frontendQuestionId: questionFrontendId
-                        isFavor
                         paidOnly: isPaidOnly
-                        status
                         title
                         titleSlug
                         topicTags {
@@ -115,7 +83,6 @@ module Scraper
                         incompleteChallengeCount
                         streakCount
                         type
-                        __typename
                     }
                 }
             }
@@ -157,13 +124,9 @@ module Scraper
                             average
                             userRating {
                                 score
-                                __typename
                             }
-                            __typename
                         }
-                        __typename
                     }
-                    __typename
                 }
             }              
             QUERY
@@ -179,5 +142,21 @@ module Scraper
                 error: result.errors
             }
         end
+        # def self.get_problems_details(slugs, driver=:edge)
+        #     unless slugs.is_a? Array
+        #         slugs = [slugs]
+        #     end
+        #     options = Selenium::WebDriver.const_get("#{driver.to_s.capitalize}::Options").new
+        #     options.headless!
+        #     driver = Selenium::WebDriver.for(driver, capabilities: [options])
+        #     result = []
+        #     slugs.each do |slug|
+        #         url = "https://leetcode.com/problems/#{slug}/"
+        #         driver.get url
+        #         result<<driver.find_element(css: '.css-v3d350')
+        #     end
+        #     # document = Nokogiri::HTML(driver.page_source)
+        # end
+
     end
 end
