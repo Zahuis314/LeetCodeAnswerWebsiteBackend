@@ -14,17 +14,11 @@ module Scraper
                     questions: data {
                         acRate
                         difficulty
-                        frontendQuestionId: questionFrontendId
-                        paidOnly: isPaidOnly
+                        questionFrontendId
+                        questionId
+                        isPaidOnly
                         title
                         titleSlug
-                        topicTags {
-                            name
-                            id
-                            slug
-                        }
-                        hasSolution
-                        hasVideoSolution
                     }
                 }
             }
@@ -52,37 +46,18 @@ module Scraper
             query = <<-QUERY
             query questionData($titleSlug: String!) {
                 question(titleSlug: $titleSlug) {
-                    questionId
-                    questionFrontendId
-                    title
-                    titleSlug
                     content
-                    isPaidOnly
-                    difficulty
                     likes
                     dislikes
-                    similarQuestions
-                    categoryTitle
-                    topicTags {
-                        name
-                        slug
-                    }
                     stats
                     hints
                     solution {
-                        id
-                        canSeeDetail
-                        paidOnly
-                        hasVideoSolution
-                        paidOnlyVideo
+                        content
                     }
                     metaData
-                    challengeQuestion {
-                        id
-                        date
-                        incompleteChallengeCount
-                        streakCount
-                        type
+                    similarQuestions
+                    topicTags {
+                        gql_id :id
                     }
                 }
             }
@@ -102,61 +77,5 @@ module Scraper
                 error: result.errors
             }
         end
-
-        def self.get_problem_solution(slug)
-            client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
-            query = <<-QUERY
-            query QuestionNote($titleSlug: String!) {
-                question(titleSlug: $titleSlug) {
-                    questionId
-                    article
-                    solution {
-                        id
-                        content
-                        contentTypeId
-                        canSeeDetail
-                        paidOnly
-                        hasVideoSolution
-                        paidOnlyVideo
-                        rating {
-                            id
-                            count
-                            average
-                            userRating {
-                                score
-                            }
-                        }
-                    }
-                }
-            }              
-            QUERY
-            result = client.execute!({
-                query: query,
-                variables: {
-                    titleSlug: slug
-                },
-                operationName: "QuestionNote"
-            })
-            return {
-                data: result.data.question,
-                error: result.errors
-            }
-        end
-        # def self.get_problems_details(slugs, driver=:edge)
-        #     unless slugs.is_a? Array
-        #         slugs = [slugs]
-        #     end
-        #     options = Selenium::WebDriver.const_get("#{driver.to_s.capitalize}::Options").new
-        #     options.headless!
-        #     driver = Selenium::WebDriver.for(driver, capabilities: [options])
-        #     result = []
-        #     slugs.each do |slug|
-        #         url = "https://leetcode.com/problems/#{slug}/"
-        #         driver.get url
-        #         result<<driver.find_element(css: '.css-v3d350')
-        #     end
-        #     # document = Nokogiri::HTML(driver.page_source)
-        # end
-
     end
 end
