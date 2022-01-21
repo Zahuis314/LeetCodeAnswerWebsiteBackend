@@ -1,5 +1,13 @@
 module Scraper
     class Problems
+        def self.create_problems()
+            problems = self.get_problems(skip=0,limit=-1)[:data][:questions]
+            db_elements = Problem.pluck "question_id"
+            gql_elements = problems.pluck "question_id"
+            diff = gql_elements - db_elements
+            to_insert = problems.select{|e|diff.member? e['question_id']}
+            Problem.insert_all(to_insert) unless to_insert.empty? 
+        end
         def self.get_problems(skip=0,limit=50)
             client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
             query = <<-QUERY
@@ -12,13 +20,13 @@ module Scraper
                 ) {
                     total: totalNum
                     questions: data {
-                        acRate
+                        ac_rate: acRate
                         difficulty
-                        questionFrontendId
-                        questionId
-                        isPaidOnly
+                        question_frontend_id: questionFrontendId
+                        question_id: questionId
+                        is_paid_only: isPaidOnly
                         title
-                        titleSlug
+                        title_slug: titleSlug
                     }
                 }
             }

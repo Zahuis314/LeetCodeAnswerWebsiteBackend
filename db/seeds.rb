@@ -6,4 +6,7 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-topic_tags = Scraper::TopicTags.create_topic_tags
+Scraper::TopicTags.create_topic_tags
+p "Added topic tags"
+Scraper::Problems.create_problems
+p "Added problems"
