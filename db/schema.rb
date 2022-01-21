@@ -10,16 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_221915) do
+ActiveRecord::Schema.define(version: 2022_01_21_231644) do
 
   create_table "problems", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.integer "difficulty"
-    t.text "description"
-    t.text "constraints"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "title_slug", null: false
+    t.boolean "is_paid_only", default: false, null: false
+    t.string "question_id", null: false
+    t.string "question_frontend_id", null: false
+    t.float "ac_rate"
     t.index ["difficulty"], name: "index_problems_on_difficulty"
+    t.index ["question_frontend_id"], name: "index_problems_on_question_frontend_id", unique: true
+    t.index ["question_id"], name: "index_problems_on_question_id", unique: true
+    t.index ["title"], name: "index_problems_on_title", unique: true
+    t.index ["title_slug"], name: "index_problems_on_title_slug", unique: true
   end
 
   create_table "topic_tags", force: :cascade do |t|
