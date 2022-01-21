@@ -7,8 +7,8 @@ module Scraper
                 questionTopicTags {
                     edges {
                         node {
+                            id
                             name
-                            translatedName
                             slug
                         }
                     }
