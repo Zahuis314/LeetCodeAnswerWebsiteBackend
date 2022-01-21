@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_17_040719) do
+ActiveRecord::Schema.define(version: 2022_01_20_221915) do
 
   create_table "problems", force: :cascade do |t|
     t.string "title"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 2022_01_17_040719) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["difficulty"], name: "index_problems_on_difficulty"
+  end
+
+  create_table "topic_tags", force: :cascade do |t|
+    t.string "gql_id", null: false
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gql_id"], name: "index_topic_tags_on_gql_id", unique: true
+    t.index ["name"], name: "index_topic_tags_on_name", unique: true
+    t.index ["slug"], name: "index_topic_tags_on_slug", unique: true
   end
 
 end
