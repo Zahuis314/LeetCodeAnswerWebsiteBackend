@@ -1,13 +1,17 @@
 module Scraper
-    class Topics
-        def self.get_topics()
+    class TopicTags
+        def self.create_topic_tags()
+            topic_tags = self.get_topic_tags()
+            TopicTag.insert_all(topic_tags[:data])
+        end
+        def self.get_topic_tags()
             client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
             query = <<-QUERY
             query questionTags {
                 questionTopicTags {
                     edges {
                         node {
-                            id
+                            gql_id :id
                             name
                             slug
                         }
