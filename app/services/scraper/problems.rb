@@ -1,12 +1,18 @@
 module Scraper
     class Problems
         def self.create_problems()
-            problems = self.get_problems(skip=0,limit=-1)[:data][:questions]
+            problems = self.get_problems()[:data][:questions]
             db_elements = Problem.pluck "question_id"
             gql_elements = problems.pluck "question_id"
             diff = gql_elements - db_elements
             to_insert = problems.select{|e|diff.member? e['question_id']}
-            Problem.insert_all(to_insert) unless to_insert.empty? 
+            to_insert.each do |problem|
+                topic_tag_array = problem.delete :topicTags
+                topic_tags_gql_ids = topic_tag_array.pluck :gql_id
+                topic_tags_ids = TopicTag.where(:gql_id => topic_tags_gql_ids).ids
+                Problem.insert(problem)
+                Problem.last.topic_tag_ids = topic_tags_ids
+            end
         end
         def self.get_problems(skip=0,limit=50)
             client = MyGQLiClient.new("https://leetcode.com/graphql/", validate_query: false)
@@ -27,6 +33,9 @@ module Scraper
                         is_paid_only: isPaidOnly
                         title
                         title_slug: titleSlug
+                        topicTags {
+                            gql_id :id
+                        }
                     }
                 }
             }
