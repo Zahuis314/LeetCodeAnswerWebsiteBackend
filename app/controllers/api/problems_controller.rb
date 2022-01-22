@@ -4,7 +4,7 @@ class Api::ProblemsController < ApplicationController
 
   # GET /api/problems.json
   def index
-    @problems = Problem.all
+    @problems = Problem.includes(:topic_tags).all()
   end
 
   # GET /api/problems/1.json
