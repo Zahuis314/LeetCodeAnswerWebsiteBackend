@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_21_231644) do
+ActiveRecord::Schema.define(version: 2022_01_22_053035) do
 
   create_table "problems", force: :cascade do |t|
     t.string "title", null: false
@@ -27,6 +27,13 @@ ActiveRecord::Schema.define(version: 2022_01_21_231644) do
     t.index ["question_id"], name: "index_problems_on_question_id", unique: true
     t.index ["title"], name: "index_problems_on_title", unique: true
     t.index ["title_slug"], name: "index_problems_on_title_slug", unique: true
+  end
+
+  create_table "problems_topic_tags", id: false, force: :cascade do |t|
+    t.integer "problem_id", null: false
+    t.integer "topic_tag_id", null: false
+    t.index ["problem_id", "topic_tag_id"], name: "index_problems_topic_tags_on_problem_id_and_topic_tag_id"
+    t.index ["topic_tag_id", "problem_id"], name: "index_problems_topic_tags_on_topic_tag_id_and_problem_id"
   end
 
   create_table "topic_tags", force: :cascade do |t|
