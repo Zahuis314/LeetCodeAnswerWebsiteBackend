@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_22_053035) do
+ActiveRecord::Schema.define(version: 2022_01_22_222545) do
+
+  create_table "problem_similarities", force: :cascade do |t|
+    t.integer "source_id"
+    t.integer "target_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["source_id", "target_id"], name: "index_problem_similarities_on_source_id_and_target_id", unique: true
+    t.index ["target_id", "source_id"], name: "index_problem_similarities_on_target_id_and_source_id", unique: true
+  end
 
   create_table "problems", force: :cascade do |t|
     t.string "title", null: false
