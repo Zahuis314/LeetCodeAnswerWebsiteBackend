@@ -6,6 +6,7 @@ class Api::ProblemsController < ApplicationController
   def index
     @problems = Problem.includes(:topic_tags)
     @problems = @problems.where(difficulty: params[:difficulty]) if params[:difficulty]
+    @problems = @problems.with_topic_tags(params[:topic_tags]) if params[:topic_tags]
     total = @problems.count
     @problems = @problems.page(params[:page]).per(10)
     @page_props = {

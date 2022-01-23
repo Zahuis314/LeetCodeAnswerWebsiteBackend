@@ -3,7 +3,7 @@ class Api::TopicTagsController < ApplicationController
   
     # GET /api/topic_tags.json
   def index
-    @topic_tags = TopicTag.all.map{|tt| {value: tt.id, text: tt.name}}
+    @topic_tags = TopicTag.all.map{|tt| {id: tt.id, label: tt.name}}
     render json: @topic_tags.to_json
   end
 end
