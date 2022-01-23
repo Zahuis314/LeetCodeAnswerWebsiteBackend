@@ -5,6 +5,7 @@ class Api::ProblemsController < ApplicationController
   # GET /api/problems.json
   def index
     @problems = Problem.includes(:topic_tags)
+    @problems = @problems.where(difficulty: params[:difficulty]) if params[:difficulty]
     total = @problems.count
     @problems = @problems.page(params[:page]).per(10)
     @page_props = {
