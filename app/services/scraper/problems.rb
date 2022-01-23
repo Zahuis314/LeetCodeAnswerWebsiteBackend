@@ -1,7 +1,7 @@
 module Scraper
     class Problems
         def self.create_problems()
-            problems = self.get_problems()[:data][:questions]
+            problems = self.get_problems(0,-1)[:data][:questions]
             db_elements = Problem.pluck "question_id"
             gql_elements = problems.pluck "question_id"
             diff = gql_elements - db_elements

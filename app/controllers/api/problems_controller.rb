@@ -8,7 +8,7 @@ class Api::ProblemsController < ApplicationController
     @problems = @problems.where(difficulty: params[:difficulty]) if params[:difficulty]
     @problems = @problems.with_topic_tags(params[:topic_tags]) if params[:topic_tags]
     total = @problems.count
-    @problems = @problems.page(params[:page]).per(10)
+    @problems = @problems.page(params[:page]).per(25)
     @page_props = {
       total_rows: total,
       per_page: @problems.limit_value
