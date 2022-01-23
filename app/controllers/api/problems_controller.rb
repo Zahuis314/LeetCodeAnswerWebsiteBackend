@@ -4,7 +4,13 @@ class Api::ProblemsController < ApplicationController
 
   # GET /api/problems.json
   def index
-    @problems = Problem.includes(:topic_tags).all()
+    @problems = Problem.includes(:topic_tags)
+    total = @problems.count
+    @problems = @problems.page(params[:page]).per(10)
+    @page_props = {
+      total_rows: total,
+      per_page: @problems.limit_value
+    }
   end
 
   # GET /api/problems/1.json
