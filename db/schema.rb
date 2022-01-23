@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_22_222545) do
+ActiveRecord::Schema.define(version: 2022_01_23_235328) do
+
+  create_table "problem_details", force: :cascade do |t|
+    t.text "content", null: false
+    t.text "solution"
+    t.text "hints"
+    t.text "metaData"
+    t.integer "totalAccepted"
+    t.integer "totalSubmission"
+    t.integer "like"
+    t.integer "dislikes"
+    t.integer "problem_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["problem_id"], name: "index_problem_details_on_problem_id", unique: true
+  end
 
   create_table "problem_similarities", force: :cascade do |t|
     t.integer "source_id"
@@ -56,4 +71,5 @@ ActiveRecord::Schema.define(version: 2022_01_22_222545) do
     t.index ["slug"], name: "index_topic_tags_on_slug", unique: true
   end
 
+  add_foreign_key "problem_details", "problems"
 end
