@@ -14,6 +14,10 @@ class Problem < ApplicationRecord
                           join_table: :problem_similarities,
                           foreign_key: :source_id,
                           association_foreign_key: :target_id
+
+  extend FriendlyId
+  friendly_id :title, use: [:slugged, :finders]
+
   def self.with_topic_tags(values)
     prob_ids = includes(:topic_tags).where(topic_tags: { id: values.pop }).ids if values.count > 0
     while values.count > 0 do

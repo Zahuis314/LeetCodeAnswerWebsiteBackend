@@ -32,7 +32,7 @@ module Scraper
                         question_id: questionId
                         is_paid_only: isPaidOnly
                         title
-                        title_slug: titleSlug
+                        slug: titleSlug
                         topicTags {
                             gql_id :id
                         }
