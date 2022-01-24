@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_24_001834) do
+ActiveRecord::Schema.define(version: 2022_01_24_012643) do
 
   create_table "problem_details", force: :cascade do |t|
     t.text "content", null: false
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2022_01_24_001834) do
     t.text "metaData"
     t.integer "totalAccepted"
     t.integer "totalSubmission"
-    t.integer "like"
+    t.integer "likes"
     t.integer "dislikes"
     t.integer "problem_id", null: false
     t.datetime "created_at", precision: 6, null: false
