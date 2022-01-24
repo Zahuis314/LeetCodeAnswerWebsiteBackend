@@ -73,9 +73,6 @@ module Scraper
                     }
                     metaData
                     similarQuestions
-                    topicTags {
-                        gql_id :id
-                    }
                 }
             }
             QUERY
@@ -87,8 +84,12 @@ module Scraper
                 operationName: "questionData"
             })
             result.data.question.similarQuestions = JSON.parse(result.data.question.similarQuestions).map{|r| r.except "translatedTitle"}
-            result.data.question.stats = JSON.parse(result.data.question.stats).except "totalAccepted","totalSubmission"
-            result.data.question.metaData = JSON.parse(result.data.question.metaData)#.except "totalAccepted","totalSubmission"
+            stats = JSON.parse(result.data.question.stats)
+            result.data.question.metaData = JSON.parse(result.data.question.metaData)
+            result.data.question.delete :stats
+            result.data.question.totalAccepted = stats["totalAcceptedRaw"]
+            result.data.question.totalSubmission = stats["totalSubmissionRaw"]
+            result.data.question.solution = result.data.question.solution.content
             return {
                 data: result.data.question,
                 error: result.errors
