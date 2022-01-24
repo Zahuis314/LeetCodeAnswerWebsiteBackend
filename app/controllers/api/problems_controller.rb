@@ -17,6 +17,7 @@ class Api::ProblemsController < ApplicationController
 
   # GET /api/problems/1.json
   def show
+    @problem_details = ProblemDetail.findOrCreate(params[:id])
   end
 
   # POST /api/problems.json
