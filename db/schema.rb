@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_22_222545) do
+ActiveRecord::Schema.define(version: 2022_01_24_012643) do
+
+  create_table "problem_details", force: :cascade do |t|
+    t.text "content", null: false
+    t.text "solution"
+    t.text "hints"
+    t.text "metaData"
+    t.integer "totalAccepted"
+    t.integer "totalSubmission"
+    t.integer "likes"
+    t.integer "dislikes"
+    t.integer "problem_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["problem_id"], name: "index_problem_details_on_problem_id", unique: true
+  end
 
   create_table "problem_similarities", force: :cascade do |t|
     t.integer "source_id"
@@ -26,7 +41,7 @@ ActiveRecord::Schema.define(version: 2022_01_22_222545) do
     t.integer "difficulty"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "title_slug", null: false
+    t.string "slug", null: false
     t.boolean "is_paid_only", default: false, null: false
     t.string "question_id", null: false
     t.string "question_frontend_id", null: false
@@ -34,8 +49,8 @@ ActiveRecord::Schema.define(version: 2022_01_22_222545) do
     t.index ["difficulty"], name: "index_problems_on_difficulty"
     t.index ["question_frontend_id"], name: "index_problems_on_question_frontend_id", unique: true
     t.index ["question_id"], name: "index_problems_on_question_id", unique: true
+    t.index ["slug"], name: "index_problems_on_slug", unique: true
     t.index ["title"], name: "index_problems_on_title", unique: true
-    t.index ["title_slug"], name: "index_problems_on_title_slug", unique: true
   end
 
   create_table "problems_topic_tags", id: false, force: :cascade do |t|
@@ -56,4 +71,5 @@ ActiveRecord::Schema.define(version: 2022_01_22_222545) do
     t.index ["slug"], name: "index_topic_tags_on_slug", unique: true
   end
 
+  add_foreign_key "problem_details", "problems"
 end
