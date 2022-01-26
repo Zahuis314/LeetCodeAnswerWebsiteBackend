@@ -18,7 +18,7 @@ class Api::ProblemsController < ApplicationController
   # GET /api/problems/1.json
   def show
     @problem_details = ProblemDetail.findOrCreate(params[:id])
-    @similar_problems = @problem.similarities.pluck(:title,:slug,:difficulty)
+    @similar_problems = @problem.similarities.select(:title,:slug,:difficulty).as_json(except: :id)
   end
 
   # POST /api/problems.json
