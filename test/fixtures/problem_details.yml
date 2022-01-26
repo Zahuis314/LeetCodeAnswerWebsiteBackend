@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  content: MyText
+  solution: MyText
+  hints: MyText
+  metaData: MyText
+  totalAccepted: 1
+  totalSubmission: 1
+  like: 1
+  dislikes: 1
+  problem: one
+
+two:
+  content: MyText
+  solution: MyText
+  hints: MyText
+  metaData: MyText
+  totalAccepted: 1
+  totalSubmission: 1
+  like: 1
+  dislikes: 1
+  problem: two

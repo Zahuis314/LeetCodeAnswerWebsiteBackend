@@ -19,6 +19,7 @@ class Api::ProblemsController < ApplicationController
   def show
     @problem_details = ProblemDetail.findOrCreate(params[:id])
     @similar_problems = @problem.similarities.select(:title,:slug,:difficulty).as_json(except: :id)
+    @topic_tags = @problem_details.topic_tags.select(:name).as_json(except: :id)
   end
 
   # POST /api/problems.json
