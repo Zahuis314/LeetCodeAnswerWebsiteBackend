@@ -1,5 +1,6 @@
 class ProblemDetail < ApplicationRecord
   belongs_to :problem
+  has_many :topic_tags, through: :problem
   serialize :metaData
   serialize :hints
 
